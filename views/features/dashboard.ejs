@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Apsara Bazaar-Dashboard</title>
+  <link rel="shortcut icon" href="/icons/logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      --color: rgba(114, 114, 114, 0.3);
+      background-color: #0e1113;
+      background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
+      background-size: 55px 55px;
+      font-family: Bitter;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      background-color: #0e1113;
+      width: 100%;
+      height: 60px;
+      color: white;
+      position: fixed;
+      z-index: 10;
+      align-items: center;
+      gap: 10px;
+      padding-left: 26px;
+    }
+
+    .coin-area {
+      margin-top: 60px;
+      background-color: #0e1113;
+      color: white;
+      width: 100%;
+      border-bottom: 2px solid black;
+      padding-bottom: 8px;
+    }
+
+    .coin-top {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .ct-left {
+      display: flex;
+      align-items: center;
+      padding-left: 10%;
+      font-size: 24px;
+    }
+
+    .ct-right {
+      padding-right: 10%;
+      text-align: center;
+    }
+
+    .coin-middle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 40px;
+      position: relative;
+    }
+
+    .bar {
+      height: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 82%;
+    border: 2px solid white;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background-color: goldenrod;
+      width: 0%;
+      border-radius: 20px;
+      transition: width 0.3s ease;
+    }
+
+    .level-label {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    #min-level {
+      left: 36px;
+    }
+
+    #max-level {
+      right: 36px;
+    }
+
+    .coin-value {
+      position: absolute;
+      z-index: 1;
+      font-size: 16px;
+      margin: 0 12px;
+    }
+
+    /* coin-bottom “all ranges” CSS */
+    .promo-all-chart {
+      margin-top: 14px;
+      padding: 0 10%;
+    }
+
+    .promo-all-chart ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .promo-all-chart li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .promo-all-chart li:last-child {
+      border-bottom: none;
+    }
+
+    .promo-all-chart span {
+      display: inline-block;
+    }
+   /* Toggle container */
+.earn-coin-detail {
+  background: #15181a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  width: 85%;
+  margin: 0px auto;
+  overflow: hidden;
+}
+
+/* Toggle button */
+.earn-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: #1e2326;
+  color: #fff;
+  border: none;
+  padding: 8px 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.earn-toggle .arrow {
+  transition: transform 0.2s ease;
+}
+
+/* Hidden by default */
+.earn-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* Expanded styles */
+.earn-coin-detail.expanded .earn-content {
+  max-height: 500px; /* large enough to fit the list */
+}
+
+.earn-coin-detail.expanded .earn-toggle .arrow {
+  transform: rotate(90deg);
+}
+
+/* List styling */
+.earn-content ul {
+  list-style: none;
+  padding: 12px 16px;
+  margin: 0;
+  color: #fff;
+}
+
+.earn-content li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 12px;
+}
+
+.earn-content li:last-child {
+  border-bottom: none;
+}
+
+.earn-content li span {
+  font-weight: bold;
+  min-width: 60px;
+  display: flex
+;
+    justify-content: center;
+    align-items: center;
+}
+
+.options{
+  width: calc(100% - 16px);
+    display: flex
+;
+    flex-direction: column;
+    height: 70%;
+    justify-content: space-evenly;
+    padding: 12px 0px;
+    padding-left: 16px;
+    background-color: #0e1113;
+
+}
+.options button {
+    width: 100%;
+    height: 32px;
+    font-size: 16px;
+    color: white;
+    background-color: transparent;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex
+;
+    align-items: center;
+    padding-left: 8px;
+}
+.options button:hover {
+    background-color: #202020;
+}
+
+.p-profile, .donation, .term, .app, .contact,.logout {
+    display: flex
+;
+    align-items: center;
+    border-bottom: 1px solid #000000;
+    width: calc(100% - 16px);
+    padding: 8px 0px;
+}
+.google-font-icon {
+    font-size: 30px;
+    font-weight: 110;
+    font-family: "Material Icons";
+    color: white;
+}
+a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+
+
+  </style>
+</head>
+
+<body>
+  <nav>
+    <svg xmlns="http://www.w3.org/2000/svg" width="22.769" height="14.821" onclick="window.location.href='/'">
+      <path d="M10.212 12.007 7.645 9.414h15.124v-4H7.62l2.585-2.586L7.377 0 0 7.378l7.37 7.443 2.842-2.814z"
+        fill="#ffffff" />
+    </svg>
+    <h2>
+      <%= type %>
+    </h2>
+  </nav>
+
+  <div class="coin-area">
+    <div class="coin-top">
+      <div class="ct-left">
+        <img src="/icons/coins.png" alt="Coins" width="28px">
+        <p>
+          <%= user.coins %>
+        </p>
+       
+      </div>
+      <div class="ct-right">
+        <p style="font-size: 14px;color: rgba(255, 255, 255, 0.562);">User Rank</p>
+        <p id="user-rank">
+        </p>
+      </div>
+    </div>
+    <div class="coin-middle">
+      <p id="min-level" class="level-label"></p>
+      <p class="coin-value">
+        <%= user.coins %>
+      </p>
+      <p id="max-level" class="level-label"></p>
+      <div class="bar">
+        <div class="bar-fill" id="bar-fill"></div>
+      </div>
+    </div>
+    <div class="coin-bottom">
+      <p style="text-align: center;font-size: 12px;color: rgba(255, 255, 255, 0.501);">Note:-Points refreshed every 24hr.</p>
+      <div class="promo-all-chart">
+        <ul id="rank-list"></ul>
+      </div>
+    </div>
+    <div class="earn-coin-detail">
+      <button class="earn-toggle">Earning Rules <span class="arrow">▸</span></button>
+      <div class="earn-content">
+        <ul>
+          <li><strong>Every Post of yours</strong> <span>10 coin</span></li>
+          <li>Every time your post gets 5 likes you get <span>1 coin</span></li>
+          <li>Every time your post gets 5 comments you get <span>2 coin</span></li>
+          <li>Every time you comment (not on your own post) you get <span>2 coin</span></li>
+          <li>Every like you give (not on your own post) gives you <span>1 coin</span></li>
+        </ul>
+      </div>
+    </div>
+    
+    </div>
+
+    <div class="options">
+
+      <div class="p-profile" onclick="window.location.href='/user/liked-posts'">
+            
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 30px;" >
+          <path d="M22.813 7.338a6.736 6.736 0 0 0-3.8-4.49c-3.206-1.471-6 .878-7.016 1.9-1.013-1.025-3.813-3.374-7.016-1.9a6.736 6.736 0 0 0-3.8 4.49 5.818 5.818 0 0 0 1 4.98c1.708 2.215 9.156 8.891 9.472 9.174a.514.514 0 0 0 .688 0c.316-.283 7.764-6.959 9.472-9.174a5.815 5.815 0 0 0 1-4.98zM21 11.689c-1.448 1.878-7.488 7.362-9 8.726-1.512-1.364-7.552-6.848-9-8.726a4.8 4.8 0 0 1-.812-4.1 5.711 5.711 0 0 1 3.226-3.8c2.229-1.027 4.731.311 6.186 2.05a.516.516 0 0 0 .4.188.516.516 0 0 0 .4-.188c.029-.035 2.958-3.536 6.188-2.055a5.714 5.714 0 0 1 3.226 3.8A4.8 4.8 0 0 1 21 11.689z" fill="#ffffff"/>
+          </svg>
+        &nbsp;&nbsp;<button>My Likes</button>
+      </div>
+
+      <div class="p-profile" onclick="window.location.href='/user/saved-posts'">
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="32px" fill="#e3e3e3"><path d="M200-120v-656.67q0-27 19.83-46.83 19.84-19.83 46.84-19.83h426.66q27 0 46.84 19.83Q760-803.67 760-776.67V-120L480-240 200-120Zm66.67-101.33L480-312l213.33 90.67v-555.34H266.67v555.34Zm0-555.34h426.66-426.66Z"/></svg>
+        &nbsp;&nbsp;<button>My Saves</button>
+      </div>
+
+
+
+
+      <div class="donation" onclick="window.location.href='/donation'">
+        <img src="/icons/donation.gif" alt="Your GIF" class="gif-overlay" width="32px" />&nbsp;&nbsp;<button>Donate Us</button>
+      </div>
+      <div class="term">
+        <img src="/icons/term.gif" alt="Your GIF" class="gif-overlay" width="32px" />&nbsp;&nbsp;
+        <button> <a href="/asset/T&C.pdf" style="text-decoration: none; color: inherit;font-size: 16px;">Term and Conditions</a></button>
+      </div>
+
+      <div class="contact">
+        <span class="google-font-icon"> contact_support </span>&nbsp;&nbsp;
+        <button onclick="window.location.href='mailto:apsarabaazar@gmail.com';">Contact Us</button>
+      </div>
+      <div class="logout">
+        <span class="google-font-icon"> logout </span>&nbsp;&nbsp;<button>
+          <a style="font-size: 16px" href="/auth/logout">Logout</a>
+        </button>
+      </div>
+
+    </div>
+
+
+
+    <script>
+      (function () {
+        // Define thresholds and labels
+        const ranks = [
+          { name: 'Fapper', min: 0, max: 499 },
+          { name: 'Gold Member ✨', min: 500, max: 999 },
+          { name: 'Elite Member 🌟', min: 1000, max: 4999 },
+          { name: 'Moderator 🛡️', min: 5000, max: 9999 },
+          { name: 'Admin 👑', min: 10000, max: Infinity }
+        ];
+
+        const userCoins = "<%= user.coins %>";
+        let current, next;
+
+        // Determine current rank bracket
+        for (let i = 0; i < ranks.length; i++) {
+          if (userCoins >= ranks[i].min && userCoins <= ranks[i].max) {
+            current = ranks[i];
+            next = ranks[i + 1] || null;
+            break;
+          }
+        }
+
+        // Set level labels
+        document.getElementById('min-level').textContent = current.min;
+        if (next) {
+          document.getElementById('max-level').textContent = next.min;
+        } else {
+          // Admin case: no upper limit
+          document.getElementById('max-level').textContent = '';
+        }
+
+        // Calculate fill percentage
+        let progress = 100;
+        if (next) {
+          const range = next.min - current.min;
+          progress = ((userCoins - current.min) / range) * 100;
+        }
+        document.getElementById('bar-fill').style.width = progress + '%';
+
+        // Update displayed rank text
+        document.getElementById('user-rank').textContent = current.name;
+
+        const rankList = document.getElementById('rank-list');
+ranks
+  .filter(r => r.max !== Infinity)   // remove Admin
+  .forEach(r => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${r.name}</span><span>${r.min}–${r.max}</span>`;
+    rankList.appendChild(li);
+  });
+
+
+      }
+      )();
+       // Toggle expand/collapse
+  document.querySelectorAll('.earn-coin-detail').forEach(container => {
+    const btn = container.querySelector('.earn-toggle');
+    btn.addEventListener('click', () => {
+      container.classList.toggle('expanded');
+    });
+  });
+
+
+
+    </script>
+</body>
+
+</html>

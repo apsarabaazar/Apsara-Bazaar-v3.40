@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apsara Bazaar - Create Post</title>
+  <link rel="shortcut icon" href="/icons/logo.png" type="image/x-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Satisfy&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      background: linear-gradient(45deg, #e91e63, #ff5722);
+      color: #fff;
+      padding: 1rem 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .header-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-family: Satisfy;
+    }
+    nav a {
+      margin-left: 1rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    nav a:hover {
+      opacity: 0.8;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #1e1e1e;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 1.75rem;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: Bitter;
+    }
+    span{
+      min-height: 33px;
+      align-content: center;
+    }
+    input[type="text"],
+    input[type="file"],
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #e0e0e0;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="file"]:focus,
+    select:focus {
+      border-color: #ff5722;
+      box-shadow: 0 0 4px rgba(255, 87, 34, 0.5);
+    }
+    small {
+      color: #888;
+      font-size: 0.85rem;
+    }
+
+    button {
+      background: linear-gradient(45deg, #ff5722, #e91e63);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .image-preview {
+      display: flex
+;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    flex-direction: column;
+    }
+    .image-preview img {
+      max-width: 95%;
+    max-height: 250px;
+    border: 2px solid #ff5722;
+    border-radius: 4px;
+    transition: transform 0.2s, opacity 0.2s;
+    cursor: move;
+    object-fit: contain;
+    }
+    .image-preview img:hover {
+      transform: scale(1.02);
+    }
+    .image-preview img.dragging {
+      opacity: 0.5;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+    .loading-bar {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      font-size: 1.125rem;
+      color: #333;
+    }
+    .loading-bar .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ff5722;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    /* Tag Checkboxes Styles */
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .tag-option {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background-color: #333;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      width: 48%;
+    }
+    .tag-option:hover {
+      background-color: #404040;
+    }
+    .tag-option input {
+      margin-right: 0.5rem;
+      accent-color: #ff5722;
+    }
+
+    @media (max-width: 600px) {
+      .header-content {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+      }
+      nav a {
+        margin: 0 0.5rem;
+      }
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      button {
+        width: 100%;
+      }
+      .tags-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">Apsara Bazaar</div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Create a New Post</h1>
+    <form id="postForm">
+      <div>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+
+      <!-- Tags Section -->
+      <div>
+        <label>Tags (select up to 3):</label>
+        <div class="tags-container">
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Bazaar">
+            <span>Bazaar</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Admire Apsara">
+            <span>Admire Apsara</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Influencers">
+            <span>Influencers</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Busty Boobies">
+            <span>Busty Boobies</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Bikini Shots">
+            <span>Bikini Shots</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Apsara Fakes">
+            <span>Apsara Fakes</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Kinks and Fantasies">
+            <span>Kinks & Fantasies</span>
+          </label>
+          <label class="tag-option">
+            <input type="checkbox" name="tags" value="Misc">
+            <span>Misc</span>
+          </label>
+        </div>
+        <small>Select 1-3 relevant tags</small>
+      </div>
+
+      <input
+        type="hidden"
+        id="bodyText"
+        name="bodyText"
+        value="Ownership of this post now transferred to Apsara Bazaar"
+      >
+
+      <div>
+        <label for="mediaInput">Upload Media:</label>
+        <input
+          type="file"
+          id="mediaInput"
+          name="media"
+          accept="image/*,video/*"
+          multiple
+          required
+          onchange="showMedia(event)"
+        >
+        <small id="mediaHelp">
+          • Images only: up to 20 files, ≤50MB total <br>
+          • If Video Post Upload only 1 Video  <br>
+          • Dont Mix Videos and Photos in one Post
+        </small>
+        <div class="image-preview" id="mediaPreview"></div>
+      </div>
+
+
+      <button type="submit">Submit Post</button>
+    </form>
+  </main>
+
+  <div class="overlay" id="overlay">
+    <div class="loading-bar">
+      <div class="spinner"></div>
+      Sending your post, please wait...
+    </div>
+  </div>
+
+  <footer>
+    &copy; <span id="year"></span> Apsara Bazaar
+  </footer>
+
+  <script>
+
+     // CONFIG
+  const MAX_IMAGE_COUNT =   20;
+  const MAX_VIDEO_COUNT =   1;
+  const MAX_IMAGE_TOTAL = 50 * 1024 * 1024;  // 50 MB
+  const MAX_VIDEO_TOTAL =100 * 1024 * 1024;  // 100 MB
+
+  let mediaFiles = [];
+  let mediaType  = null; // "image" or "video"
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tag Selection Logic
+    const MAX_TAGS = 3;
+    const tagCheckboxes = document.querySelectorAll('input[name="tags"]');
+    tagCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        const checkedTags = document.querySelectorAll('input[name="tags"]:checked');
+        if (checkedTags.length > MAX_TAGS) {
+          e.target.checked = false;
+          alert(`Maximum ${MAX_TAGS} tags allowed`);
+        }
+      });
+    });
+
+    function showMedia(event) {
+  const files = Array.from(event.target.files);
+  const preview = document.getElementById('mediaPreview');
+  preview.innerHTML = '';
+  mediaFiles = [];
+  mediaType = null;
+  let totalSize = 0;
+
+  // 1. Detect and validate type
+  for (let f of files) {
+    const kind = f.type.startsWith('image/') ? 'image'
+               : f.type.startsWith('video/') ? 'video'
+               : null;
+    if (!kind) {
+      return alert(`Unsupported file type: ${f.name}`);
+    }
+    if (!mediaType) mediaType = kind;
+    else if (mediaType !== kind) {
+      alert('Cannot mix images and videos in one post');
+      location.reload();
+    }
+  }
+
+  // 2. Count & total size check
+  const maxCount = mediaType === 'image' ? MAX_IMAGE_COUNT : MAX_VIDEO_COUNT;
+  const maxTotal = mediaType === 'image' ? MAX_IMAGE_TOTAL : MAX_VIDEO_TOTAL;
+
+  if (files.length > maxCount) {
+    return alert(`Too many ${mediaType}s: max ${maxCount}`);
+  }
+
+  for (let f of files) {
+    totalSize += f.size;
+    if (totalSize > maxTotal) {
+      return alert(`Total ${mediaType} size exceeds ${maxTotal / 1024 / 1024} MB`);
+    }
+    mediaFiles.push(f);
+  }
+
+  // 3. Render preview and assign index
+  mediaFiles.forEach((file, idx) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('media-item');
+      wrapper.draggable = true;
+      wrapper.dataset.index = idx;
+
+      const element = mediaType === 'image'
+        ? document.createElement('img')
+        : document.createElement('video');
+
+      element.src = e.target.result;
+      element.style.maxHeight = '150px';
+      if (mediaType === 'video') element.controls = true;
+
+      wrapper.appendChild(element);
+      preview.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // 4. Enable reordering
+  Sortable.create(preview, {
+    animation: 150
+  });
+}
+
+  
+  document.getElementById('postForm').onsubmit = async function (event) {
+  event.preventDefault();
+
+  const tags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+    .map(cb => cb.value);
+  if (tags.length === 0 || tags.length > 3) {
+    alert('Please select 1–3 tags');
+    return;
+  }
+
+  if (!mediaFiles || mediaFiles.length === 0) {
+    alert('Please select at least one media file.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('title', document.getElementById('title').value);
+  formData.append('bodyText', document.getElementById('bodyText').value);
+  tags.forEach(tag => formData.append('tags', tag));
+
+  const preview = document.getElementById('mediaPreview');
+  const ordered = Array.from(preview.children).map(el => Number(el.dataset.index));
+
+  let validMediaCount = 0;
+  ordered.forEach(idx => {
+    const file = mediaFiles[idx];
+    if (file instanceof File) {
+      console.log('📎 Appending file:', file.name, file instanceof File);
+      formData.append('media', file, file.name);
+      validMediaCount++;
+    } else {
+      console.warn('⚠️ Invalid file skipped:', file);
+    }
+  });
+
+  // Show actual entries
+  for (const [k, v] of formData.entries()) {
+    console.log(`• ${k}:`, v instanceof File ? v.name : v);
+  }
+
+  if (validMediaCount === 0) {
+    alert('Something went wrong: No valid media was added.');
+    return;
+  }
+
+  document.getElementById('overlay').style.display = 'flex';
+  try {
+    const res = await fetch('/post/create', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    document.getElementById('overlay').style.display = 'none';
+
+    if (data.success) {
+      alert('Post created successfully!');
+      window.location.href = '/';
+    } else {
+      alert('Error: ' + data.message);
+    }
+  } catch (err) {
+    console.error('❌ Upload error:', err);
+    document.getElementById('overlay').style.display = 'none';
+    alert('Upload failed.');
+  }
+};
+
+ </script>
+</body>
+</html>

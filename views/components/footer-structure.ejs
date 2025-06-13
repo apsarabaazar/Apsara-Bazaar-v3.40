@@ -1,0 +1,134 @@
+<style>
+  #NewNotify{
+    display: none;
+    position: absolute;
+    background-color: #ff3040;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    top: 0px;
+    right: 2px;
+  }
+</style>
+
+    <div class="play-type">
+      <div class="arena" id="home-btn">
+
+        <svg rpl="" height="24" icon-name="home-fill" viewBox="0 0 20 20" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="m19.724 6.765-9.08-6.11A1.115 1.115 0 0 0 9.368.647L.276 6.765a.623.623 0 0 0 .35 1.141h.444v10.001c.001.278.113.544.31.74.196.195.462.304.739.303h5.16a.704.704 0 0 0 .706-.707v-4.507c0-.76 1.138-1.475 2.02-1.475.882 0 2.02.715 2.02 1.475v4.507a.71.71 0 0 0 .707.707h5.16c.274-.001.538-.112.732-.307.195-.195.305-.46.306-.736v-10h.445a.618.618 0 0 0 .598-.44.625.625 0 0 0-.25-.702Z" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  stroke-width="1.5"/>
+          </svg>
+       
+      </div>
+      <div class="rush" id="search-btn">
+        <svg rpl="" aria-hidden="true" fill="currentColor" height="24px" icon-name="search-outline" viewBox="0 0 20 20" width="24px" xmlns="http://www.w3.org/2000/svg"> 
+          <path d="M18.916 17.717 15.2 14.042a8.043 8.043 0 1 0-1.053 1.069l3.709 3.672a.75.75 0 0 0 1.056-1.066h.004ZM2.5 9a6.5 6.5 0 1 1 11.229 4.446.695.695 0 0 0-.116.077.752.752 0 0 0-.086.132A6.492 6.492 0 0 1 2.5 9Z"></path>
+        </svg>
+    </div>
+    <% if (!user) { %>
+    <div class="rush" id="guest-post-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve" width="22px">
+        <path style="fill:#ffffff" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/>
+      </svg>    
+  </div>
+  <% } %>
+
+      <div class="rush" id="chat-btn">
+          <svg rpl="" fill="currentColor" height="24" icon-name="chat-outline" viewBox="0 0 20 20" width="24" xmlns="http://www.w3.org/2000/svg"> 
+            <path d="M11.61 19.872a10.013 10.013 0 0 0 6.51-4.035A9.999 9.999 0 0 0 12.275.264c-1.28-.3-2.606-.345-3.903-.132a10.05 10.05 0 0 0-8.25 8.311 9.877 9.877 0 0 0 1.202 6.491l-1.24 4.078a.727.727 0 0 0 .178.721.72.72 0 0 0 .72.19l4.17-1.193A9.87 9.87 0 0 0 9.998 20c.54 0 1.079-.043 1.612-.128ZM1.558 18.458l1.118-3.69-.145-.24A8.647 8.647 0 0 1 1.36 8.634a8.778 8.778 0 0 1 7.21-7.27 8.765 8.765 0 0 1 8.916 3.995 8.748 8.748 0 0 1-2.849 12.09 8.763 8.763 0 0 1-3.22 1.188 8.68 8.68 0 0 1-5.862-1.118l-.232-.138-3.764 1.076ZM6.006 9a1.001 1.001 0 0 0-.708 1.707A1 1 0 1 0 6.006 9Zm4.002 0a1.001 1.001 0 0 0-.195 1.981 1 1 0 1 0 .195-1.98Zm4.003 0a1.001 1.001 0 1 0 0 2.003 1.001 1.001 0 0 0 0-2.003Z"></path>
+          </svg>      
+      </div>
+
+      <div class="rush" id="notification-btn" style="position: relative;" >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24px">
+          <g data-name="39-Alarm">
+            <path d="m31.89 27.55-2-4A1 1 0 0 0 29 23h-1v-8a12.31 12.31 0 0 0-9-11.8V2a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v1.2A12.31 12.31 0 0 0 4 15v8H3a1 1 0 0 0-.89.55l-2 4A1 1 0 0 0 1 29h11.14a4 4 0 0 0 7.72 0H31a1 1 0 0 0 .89-1.45zM2.62 27l1-2H23v-2H6v-8a10.25 10.25 0 0 1 8.18-10A1 1 0 0 0 15 4V2h2v2a1 1 0 0 0 .82 1A10.25 10.25 0 0 1 26 15v9a1 1 0 0 0 1 1h1.38l1 2z" fill="#ffffff" />
+          </g></svg>  
+          <div id="NewNotify" ></div>  
+    </div>
+  
+      <% if (user) { %>
+      <div class="pt-profile" onclick="showprofile(1)" >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32" xml:space="preserve" width="30px">
+          <path d="M16 31C7.729 31 1 24.271 1 16S7.729 1 16 1s15 6.729 15 15-6.729 15-15 15zm0-28C8.832 3 3 8.832 3 16s5.832 13 13 13 13-5.832 13-13S23.168 3 16 3z" fill="#ffffff" />
+          <circle cx="16" cy="11.368" r="3.368"fill="#ffffff"/>
+          <path d="M20.673 24h-9.346c-.83 0-1.502-.672-1.502-1.502v-.987a5.404 5.404 0 0 1 5.403-5.403h1.544a5.404 5.404 0 0 1 5.403 5.403v.987c0 .83-.672 1.502-1.502 1.502z"fill="#ffffff"/>
+        </svg>
+      </div>
+      <% } %>
+    </div>
+    
+
+    <% if (user) { %> 
+        <div id="overlay">
+          <div id="content">
+            <div class="stclose">
+              <button class="clm" style="background-color: #ffa27f00" onclick="showprofile(2)">
+                <span class="money-need" style="font-size: 26px"> close </span>
+              </button>
+            </div>
+            <div class="c-head">
+              <div class="p-pop">
+                <img src="/icons/profile.gif" alt="Your GIF" class="gif-overlay" width="40px" />
+                &nbsp;&nbsp;<%= user.name.split(' ')[0] %>
+              </div>
+            </div>
+      
+            <div class="p-options">
+              <div class="p-profile" onclick="window.location.href='/my-profile'">
+                <img src="/icons/profile.gif" alt="Your GIF" class="gif-overlay" width="32px" />&nbsp;&nbsp;<button>My Profile</button>
+              </div>
+              <div class="p-profile" onclick="window.location.href='/user/dashboard'">
+                <img src="/icons/dashboard.png" alt="Your GIF" class="gif-overlay" width="22px" />&nbsp;&nbsp;<button>My Dashboard</button>
+              </div>
+              <% if (user.rank==="Admin") { %> 
+              <div class="app">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                  <path d="M12 3a8.959 8.959 0 0 0-7 3.339V4H3v6h6V8H6.274a6.982 6.982 0 1 1-1.054 5.751l-1.936.5A9 9 0 1 0 12 3z" fill="#ffffff" />
+                </svg>
+                &nbsp;&nbsp;<button onclick="refreshFeed()">Refresh Feed</button>
+              </div>
+              <% } %>
+              <div class="app">
+                <span class="money-need"> download </span>&nbsp;&nbsp;<button id="install-button" onclick="install()">Install App</button>
+              </div>
+              <div class="logout">
+                <span class="money-need"> logout </span>&nbsp;&nbsp;<button>
+                  <a style="font-size: 16px" href="/auth/logout">Logout</a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <script>
+          function showprofile(n) {
+  const o = document.getElementById("overlay");
+  const c = document.getElementById("content");
+  if (!o || !c) return;
+
+  if (n === 1) {
+    o.style.display = "flex";
+    c.style.display = "flex";
+    // Trigger a reflow to ensure the browser notices the change
+    c.offsetHeight; // This forces a reflow
+    c.style.height = "44vh";
+  } else {
+    c.style.height = "0vh";
+    setTimeout(() => {
+      o.style.display = "none";
+      c.style.display = "none";
+    }, 500); // Delay matches the transition duration
+  }
+}
+function refreshFeed() {
+    fetch('/admin/refreshCache', { method: 'POST' })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert("Error contacting server."));
+  }
+
+        </script>

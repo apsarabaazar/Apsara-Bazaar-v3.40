@@ -1,0 +1,41 @@
+<script>
+  let userID = "<%= user ? user.username : 'null' %>";
+  let userRank = "<%= user ? user.rank : 'null' %>";
+  let guestId = "<%= guestUser ? guestUser.guestId : 'null' %>";
+  const isLoggedIn = userID !== "null";
+  const localGuestId = localStorage.getItem("guestId");
+  let userLikes = [];
+  let userSaves = []
+  let userFollowing = []
+  try {
+    userLikes = "<%= user && user.likes ? user.likes : (guestUser && guestUser.likes ? guestUser.likes : []) %>";
+    userSaves = "<%= user && user.saves ? user.saves : [] %>";
+    userFollowing = "<%= user && user.following ? user.following : [] %>"
+
+    if (!isLoggedIn) {
+      if(!guestId){
+        window.location.reload();
+      }
+      // If guestId exists and localStorage has no value (or "null" string), set it
+      if (guestId && (!localGuestId || localGuestId === "null")) {
+        localStorage.setItem("guestId", guestId);
+      }
+      console.log(guestId)
+      // If localStorage guestId exists AND it doesn't match the session guestId, reset session
+      if (localGuestId && guestId && localGuestId !== guestId) {
+        fetch('/reset-guest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ guestId: localGuestId })
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    }
+
+
+  } catch (e) {
+    console.error("Error parsing userLikes:", e);
+  }
+
+</script>
