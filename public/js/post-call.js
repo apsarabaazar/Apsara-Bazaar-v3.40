@@ -68,7 +68,7 @@ function renderPost(post) {
       ? `<video id="media-${sanitized.id}" class="post-video" src="${sanitize(firstSrc)}" preload="metadata" data-media='${safeMediaJson}'
      loading="lazy">Your browser does not support the video tag.</video> 
       <div class="controls">
-      <button class="play-pause">►</button><input type="range" class="seek-bar" value="0" min="0" step="0.1">
+      <button class="play-pause">&#9654;</button><input type="range" class="seek-bar" value="0" min="0" step="0.1">
        <button class="fullscreen">⛶</button>
       </div>`
 
@@ -274,7 +274,7 @@ if (videoEl && playBtn && seekBar && fsBtn) {
       playBtn.textContent = '❚❚';
     } else {
       videoEl.pause();
-      playBtn.textContent = '►';
+      playBtn.textContent = '&#9654;';
     }
   });
 
@@ -336,9 +336,9 @@ if (videoEl && playBtn && seekBar && fsBtn) {
     }
   });
 
-  // reset icon on end
   videoEl.addEventListener('ended', () => {
-    playBtn.textContent = '►';
+    videoEl.currentTime = 0;
+    videoEl.play();
   });
 }
 
