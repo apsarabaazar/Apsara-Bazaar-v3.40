@@ -127,13 +127,15 @@
       <div class="tags">
         <button class="tag t-1" data-tag="" style="background: #2a3236;">All</button>
         <button class="tag t-2" data-tag="Bazaar">Bazaar</button>
-        <button class="tag t-3" data-tag="Admire Apsara">Admire Apsara</button>
-        <button class="tag t-4" data-tag="Bikini Shots">Bikini Shots</button>
-        <button class="tag t-5" data-tag="Busty Boobies">Busty Boobies</button>
-        <button class="tag t-6" data-tag="Influencers">Influencers</button>
-        <button class="tag t-7" data-tag="Kinks and Fantasies">Kinks & Fantasies</button>
-        <button class="tag t-8" data-tag="Apsara Fakes">Apsara Fakes</button>
-        <button class="tag t-9" data-tag="Misc">Misc</button>
+        <button class="tag t-3" data-tag="Pick One Celeb">Pick One Celeb</button>
+        <button class="tag t-4" data-tag="Admire Apsara">Admire Apsara</button>
+        <button class="tag t-5" data-tag="HollyWood">HollyWood</button>
+        <button class="tag t-6" data-tag="Bikini Shots">Bikini Shots</button>
+        <button class="tag t-7" data-tag="Busty Boobies">Busty Boobies</button>
+        <button class="tag t-8" data-tag="Influencers">Influencers</button>
+        <button class="tag t-9" data-tag="Kinks and Fantasies">Kinks & Fantasies</button>
+        <button class="tag t-10" data-tag="Apsara Fakes">Apsara Fakes</button>
+        <button class="tag t-11" data-tag="Misc">Misc</button>
       </div>
     </div>
   </div>
@@ -267,17 +269,20 @@
                 dropdownMenu.classList.remove('show');
               }
             });
-            // Set up tag click listeners 
             const tagMappings = [
               { selector: ".t-1", tag: "" },
               { selector: ".t-2", tag: "Bazaar" },
-              { selector: ".t-3", tag: "Admire Apsara" },
-              { selector: ".t-4", tag: "Bikini Shots" },
-              { selector: ".t-5", tag: "Busty Boobies" },
-              { selector: ".t-6", tag: "Influencers" },
-              { selector: ".t-7", tag: "Kinks and Fantasies" },
-              { selector: ".t-8", tag: "Apsara Fakes" },
-              { selector: ".t-9", tag: "Misc" },
+              { selector: ".t-3", tag: "Pick One Celeb" },
+              { selector: ".t-4", tag: "Admire Apsara" },
+              { selector: ".t-5", tag: "HollyWood" },
+              { selector: ".t-6", tag: "Bikini Shots" },
+              { selector: ".t-7", tag: "Busty Boobies" },
+              { selector: ".t-8", tag: "Influencers" },
+              { selector: ".t-9", tag: "Kinks and Fantasies" },
+              { selector: ".t-10", tag: "Apsara Fakes" },
+              { selector: ".t-11", tag: "Misc" },
+
+              // Sort Options
               { selector: ".s-1", tag: "" },
               { selector: ".s-2", tag: "Hot" },
               { selector: ".s-3", tag: "Top" },
@@ -345,60 +350,60 @@
           let postCount = 0; // Tracks total rendered posts for ad placement
           let fetchCount = 0; // Tracks fetch operations for ad loading
 
-           // Fetch and render posts
-async function fetchAndRenderPosts(tag = "") {
-  if (isLoading) return;
-  isLoading = true;
+          // Fetch and render posts
+          async function fetchAndRenderPosts(tag = "") {
+            if (isLoading) return;
+            isLoading = true;
 
-  // Cancel any previous request and create a new abort controller
-  abortController.abort();
-  abortController = new AbortController();
+            // Cancel any previous request and create a new abort controller
+            abortController.abort();
+            abortController = new AbortController();
 
-  try {
-    console.log("0");
-    // Fetch posts from the API using the current skipCount and abort signal
-    const response = await fetch(`/api/posts?skip=${skipCount}&limit=${POSTS_PER_PAGE}&tag=${encodeURIComponent(tag)}`, {
-      signal: abortController.signal,
-    });
-    if (!response.ok) throw new Error("Failed to fetch posts");
+            try {
+              console.log("0");
+              // Fetch posts from the API using the current skipCount and abort signal
+              const response = await fetch(`/api/posts?skip=${skipCount}&limit=${POSTS_PER_PAGE}&tag=${encodeURIComponent(tag)}`, {
+                signal: abortController.signal,
+              });
+              if (!response.ok) throw new Error("Failed to fetch posts");
 
-    const data = await response.json();
-    console.log(data);
-  
-    // Sort posts by creation date in descending order
-    data.posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+              const data = await response.json();
+              console.log(data);
 
-    // Hide loading message (if present)
-    const loadingMessage = document.getElementById("loadingMessage");
-    if (loadingMessage) loadingMessage.style.display = "none";
-    console.log("1");
+              // Sort posts by creation date in descending order
+              data.posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    // Render each post
-    data.posts.forEach(post => {
-      postsContainer.appendChild(renderPost(post));
-    });
-    console.log("2");
-     // Loop through each post and add the author badge
-     data.posts.forEach(async post => {
-       await AddAuthorBadge(post.author, post._id);
-     });
-     console.log("3")
+              // Hide loading message (if present)
+              const loadingMessage = document.getElementById("loadingMessage");
+              if (loadingMessage) loadingMessage.style.display = "none";
+              console.log("1");
+
+              // Render each post
+              data.posts.forEach(post => {
+                postsContainer.appendChild(renderPost(post));
+              });
+              console.log("2");
+              // Loop through each post and add the author badge
+              data.posts.forEach(async post => {
+                await AddAuthorBadge(post.author, post._id);
+              });
+              console.log("3")
 
 
-    // Update skip count and manage the load more button
-    skipCount += data.posts.length;
-    manageLoadMoreButton(data.posts.length);
-  } catch (error) {
-    // Ignore abort errors; for other errors, log and display an error message
-    if (error.name !== "AbortError") {
-      console.error("Error fetching posts:", error);
-      postsContainer.innerHTML = "<p>Failed to load posts. Please try again later.</p>";
-    }
-  } finally {
-    isLoading = false;
-    document.getElementById('loading-overlay').style.display = 'none';
-  }
-}
+              // Update skip count and manage the load more button
+              skipCount += data.posts.length;
+              manageLoadMoreButton(data.posts.length);
+            } catch (error) {
+              // Ignore abort errors; for other errors, log and display an error message
+              if (error.name !== "AbortError") {
+                console.error("Error fetching posts:", error);
+                postsContainer.innerHTML = "<p>Failed to load posts. Please try again later.</p>";
+              }
+            } finally {
+              isLoading = false;
+              document.getElementById('loading-overlay').style.display = 'none';
+            }
+          }
 
 
 
@@ -414,8 +419,6 @@ async function fetchAndRenderPosts(tag = "") {
             fetchAndRenderPosts();
             InitializeFooter()
             CheckUpdates();
-
-
           });
           // Expose functions used in inline HTML (assumed to be defined elsewhere)
           window.addLike = addLike;
