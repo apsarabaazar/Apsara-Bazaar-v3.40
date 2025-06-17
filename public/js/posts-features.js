@@ -4,7 +4,7 @@ let currentImageIndexes = {};
 function loadpostdetails(id){
   document.getElementById('loading-overlay').style.display = 'flex';
   setTimeout(function() {
-    window.location.href = `/post/details/${id}`;
+    window.location.href = `/post/comments/${id}`;
   }, 750);  // 100ms delay so the overlay appears
 }
 
