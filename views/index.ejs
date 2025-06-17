@@ -402,6 +402,13 @@
             } finally {
               isLoading = false;
               document.getElementById('loading-overlay').style.display = 'none';
+// Every 5th fetch, load ads after a short delay
+               fetchCount++;
+              console.log("Ad fetch count goes to :"+fetchCount)
+              if (fetchCount % 5 === 0) {
+                console.log("Showing ads")
+                setTimeout(() => LoadAds(), 5000);
+              }
             }
           }
 
