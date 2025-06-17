@@ -58,7 +58,7 @@ mongoose.connect(process.env.MONGO_DB, {
   socketTimeoutMS: 30000,   // Close idle connections after 30 seconds of inactivity
   connectTimeoutMS: 10000,   // Max time to wait for a connection to be established
 })
-//mongoose.connect("mongodb://0.0.0.0:27017/ApsaraBazaar")
+  //mongoose.connect("mongodb://0.0.0.0:27017/ApsaraBazaar")
   .then(() => {
     console.log("Database connected");
 
@@ -244,7 +244,9 @@ const limit = pLimit(5);
 // });
 
 // Cache store for latest and per-tag posts
-const tags = ["Bazaar", "Admire Apsara", "Influencers", "Kinks and Fantasies", "Apsara Fakes", "Hot", "Top", "Rising", "Old"];
+const tags = ["Bazaar", "Pick One Celeb", "Admire Apsara", "HollyWood", "Bikini Shots", "Busty Boobies", "Influencers",
+  "Kinks and Fantasies", "Apsara Fakes", "Misc", "Hot", "Top", "Rising", "Old"];
+
 const cacheStore = { latest: [], tags: new Map() };
 
 // In-memory cache for file_path
@@ -373,11 +375,13 @@ async function refreshCache() {
   // 1) Refresh “latest” with its own error handling
   try {
     const latestPosts = await loadPosts({ size: 30 });
-    cacheStore.latest = await enrichPosts(latestPosts);
+    const filteredPosts = latestPosts.filter(post => !post.tags.includes("Misc"));
+    cacheStore.latest = await enrichPosts(filteredPosts);
     console.log('Latest posts cache refreshed.');
   } catch (err) {
     console.error('Error refreshing latest cache:', err);
   }
+  
 
   // 2) Refresh each tag, but only 5 at a time
   const tasks = tags.map(tag => limit(async () => {
@@ -707,7 +711,7 @@ function validateMedia(files) {
 // 3) The route
 app.post('/post/create', (req, res) => {
 
-  
+
   upload(req, res, async uploadErr => {
     if (uploadErr) {
       return res.status(400).json({ success: false, message: uploadErr.message });
@@ -720,7 +724,7 @@ app.post('/post/create', (req, res) => {
     try {
       console.log('📩 Server received media files:', req.files.length);
       req.files.forEach(f => console.log(`- ${f.originalname} (${f.size} bytes)`));
-     
+
 
       // A) Validate media & get its type
       const type = validateMedia(req.files);
@@ -747,17 +751,17 @@ app.post('/post/create', (req, res) => {
           } else {
             r1 = await bot.sendVideo(
               process.env.TELEGRAM_GROUP_ID,
-              file.buffer,                                 
-              {                                        
+              file.buffer,
+              {
                 caption: `Post ID: ${postId}`,
                 supports_streaming: true
               },
-              {                                           
+              {
                 filename: file.originalname || 'video.mp4',
                 contentType: file.mimetype
               }
             );
-            
+
             r2 = await bot2.sendVideo(
               process.env.TELEGRAM_GROUP_ID2,
               file.buffer,
