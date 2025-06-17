@@ -499,7 +499,6 @@ async function initializeUserPoints() {
     const threads = await Comment.find({});
     let userCommentEvents = 0;
     for (const thread of threads) {
-      // optionally skip own-posts logic here
       thread.comments.forEach(comment => {
         if (comment.author === user.username /* && thread.postId ≠ your own */) {
           userCommentEvents++;
@@ -517,15 +516,23 @@ async function initializeUserPoints() {
     // 5) Every like you give (not on your own post) = 1 coin each
     coins += (user.likes?.length || 0) * 1;
 
-    // ——— Special exception for your super-admin ———
+    // ——— Special case: super-admin ———
     if (user.username === 'apsara_bazaar') {
-      // Guarantee at least 30k coins and Admin rank
       coins = Math.max(coins, 30000);
       user.rank = 'Admin';
     } else {
-      // Determine rank normally
-      const bracket = ranks.find(r => coins >= r.min && coins <= r.max);
-      if (bracket) user.rank = bracket.name;
+      // If already Moderator, preserve it
+      if (user.rank === 'Moderator') {
+        const moderatorBracket = ranks.find(r => r.name === 'Moderator');
+        if (moderatorBracket && coins < moderatorBracket.min) {
+          coins = moderatorBracket.min; // ensure minimum coins for moderator
+        }
+        // keep rank as Moderator
+      } else {
+        // Normal logic for others
+        const bracket = ranks.find(r => coins >= r.min && coins <= r.max);
+        if (bracket) user.rank = bracket.name;
+      }
     }
 
     // Persist
@@ -536,6 +543,7 @@ async function initializeUserPoints() {
 
   console.log('All users initialized.');
 }
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -918,7 +926,7 @@ app.post('/post/delete/:postId', async (req, res) => {
 
 
     //6. Refreshing the cache
-    await refreshAllCaches();
+    await refreshCache();
 
     res.status(200).json({
       success: true,
