@@ -65,8 +65,12 @@ function renderPost(post) {
     const firstSrc = mediaSources[0];
     const safeMediaJson = sanitize(JSON.stringify(mediaSources));
     const tag = isVideoUrl(firstSrc)
-      ? `<video id="media-${sanitized.id}" src="${sanitize( firstSrc)}" controls preload="metadata" data-media='${safeMediaJson}'
-      onclick="openFullscreenMedia('${sanitized.id}')"loading="lazy">Your browser does not support the video tag.</video>`
+      ? `<video id="media-${sanitized.id}" class="post-video" src="${sanitize(firstSrc)}" preload="metadata" data-media='${safeMediaJson}'
+     loading="lazy">Your browser does not support the video tag.</video> 
+      <div class="controls">
+      <button class="play-pause">►</button><input type="range" class="seek-bar" value="0" min="0" step="0.1">
+       <button class="fullscreen">⛶</button>
+      </div>`
 
       : `<img id="media-${sanitized.id}" src="${sanitize(firstSrc)}" alt="Click to Retry" data-media='${safeMediaJson}' onclick="openFullscreenMedia('${sanitized.id}')" loading="lazy">`;
 
@@ -256,6 +260,89 @@ function renderPost(post) {
     </div>
   </div>
 `;
+
+const videoEl = postElement.querySelector('video.post-video');
+const playBtn = postElement.querySelector('button.play-pause');
+const seekBar = postElement.querySelector('input.seek-bar');
+const fsBtn = postElement.querySelector('button.fullscreen');
+
+if (videoEl && playBtn && seekBar && fsBtn) {
+  // toggle play/pause
+  playBtn.addEventListener('click', () => {
+    if (videoEl.paused) {
+      videoEl.play();
+      playBtn.textContent = '❚❚';
+    } else {
+      videoEl.pause();
+      playBtn.textContent = '►';
+    }
+  });
+
+  // update seek-bar as it plays
+  videoEl.addEventListener('timeupdate', () => {
+    seekBar.max = videoEl.duration;
+    seekBar.value = videoEl.currentTime;
+
+    // update fill while playing
+    const pct = (seekBar.value / seekBar.max) * 100;
+    seekBar.style.background = `
+      linear-gradient(
+        to right,
+        white 0%,
+        white ${pct}%,
+        transparent ${pct}%,
+        transparent 100%
+      )
+    `;
+  });
+
+  // let user scrub
+  seekBar.addEventListener('input', () => {
+    videoEl.currentTime = seekBar.value;
+
+    // update fill while scrubbing
+    const pct = (seekBar.value / seekBar.max) * 100;
+    seekBar.style.background = `
+      linear-gradient(
+        to right,
+        white 0%,
+        white ${pct}%,
+        transparent ${pct}%,
+        transparent 100%
+      )
+    `;
+  });
+
+  // initialize fill at load
+  videoEl.addEventListener('loadedmetadata', () => {
+    seekBar.max = videoEl.duration;
+    seekBar.value = 0;
+    seekBar.style.background = `
+      linear-gradient(
+        to right,
+        white 0%,
+        transparent 0%
+      )
+    `;
+  });
+
+  // fullscreen
+  fsBtn.addEventListener('click', () => {
+    const container = videoEl.closest('.media-container');
+    if (!document.fullscreenElement) {
+      container.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  });
+
+  // reset icon on end
+  videoEl.addEventListener('ended', () => {
+    playBtn.textContent = '►';
+  });
+}
+
+
 
   return postElement;
 }
